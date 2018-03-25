@@ -98,7 +98,6 @@ public class SwedeDefender {
             }
         }
 
-
         Move captureMove = MyTools.getCaptureMove(bs, bs.getAllLegalMoves());
         if (captureMove != null) {
             candidateMoves.add((TablutMove) captureMove);
@@ -113,7 +112,7 @@ public class SwedeDefender {
         }
     }
 
-    public static int evaluatePosition(TablutBoardState bs) {
+    public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
 	    int value = 100;
 	    value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
 
@@ -128,8 +127,15 @@ public class SwedeDefender {
         value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
         Coord kingPosition = bs.getKingPosition();
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8) {
-            value += 200;
+            value += 100;
+            //Slightly favour moves that move the king, even if its to another wall
+            if (move.getEndPosition().x == kingPosition.x && move.getEndPosition().y == kingPosition.y) {
+                value++;
+            }
         }
+
+        value -= MyTools.cutOffCornerCount(bs) * 10;
+        value -= Coordinates.distanceToClosestCorner(bs.getKingPosition());
 
         return value;
     }

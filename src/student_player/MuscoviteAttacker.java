@@ -32,12 +32,13 @@ public class MuscoviteAttacker {
 	}
 
 
-	public static int evaluatePosition(TablutBoardState bs) {
+	public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
 		int value = 100;
 		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
 
 		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
 
+		value += MyTools.cutOffCornerCount(bs) * 10;
 		if (bs.gameOver()) {
 			if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
 				return Integer.MAX_VALUE;

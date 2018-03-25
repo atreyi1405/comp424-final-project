@@ -32,9 +32,9 @@ public class Minimax {
         if (depth == 0) {
             int value;
             if (node.bs.getTurnPlayer() == TablutBoardState.SWEDE) {
-                value = SwedeDefender.evaluatePosition(node.bs);
+                value = SwedeDefender.evaluatePosition(node.bs, node.move);
             } else {
-                value = MuscoviteAttacker.evaluatePosition(node.bs);
+                value = MuscoviteAttacker.evaluatePosition(node.bs, node.move);
             }
             node.score = value;
             return value;
