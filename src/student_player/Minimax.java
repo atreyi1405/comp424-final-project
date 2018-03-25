@@ -18,7 +18,7 @@ public class Minimax {
             TablutBoardState cloneBS = (TablutBoardState) bs.clone();
             cloneBS.processMove(move);
             Node newNode = new Node(cloneBS, null, move);
-            int value = minimax(newNode, 1, playerID);
+            int value = minimax(newNode, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, playerID);
             if (value > maxValue) {
                 maxValue = value;
                 best = move;
@@ -28,9 +28,9 @@ public class Minimax {
         return best;
     }
 
-    private static int minimax (Node node, int depth, int maximizingPlayer) {
+    private static int minimax (Node node, int depth, int alpha, int beta, int maximizingPlayer) {
         if (depth == 0) {
-            int value = 0;
+            int value;
             if (node.bs.getTurnPlayer() == TablutBoardState.SWEDE) {
                 value = SwedeDefender.evaluatePosition(node.bs);
             } else {
@@ -41,33 +41,36 @@ public class Minimax {
         }
 
         if (node.bs.getTurnPlayer() == maximizingPlayer) {
+            int bestValue = Integer.MIN_VALUE;
+
             for (TablutMove move : node.bs.getAllLegalMoves()) {
                 TablutBoardState cloneBS = (TablutBoardState) node.bs.clone();
                 cloneBS.processMove(move);
-                Node newNode = new Node(cloneBS, node, move);
-                node.addChild(newNode);
+                Node childNode = new Node(cloneBS, node, move);
+                bestValue = Math.max(bestValue, minimax(childNode, depth - 1, alpha, beta, maximizingPlayer));
+                alpha = Math.max(alpha, bestValue);
+                if (beta <= alpha) {
+                    break;
+                }
+                node.addChild(childNode);
             }
 
-            int bestValue = Integer.MIN_VALUE;
-            for(Node childNode : node.children) {
-                int value = minimax(childNode, depth - 1, maximizingPlayer);
-                bestValue = Math.max(bestValue, value);
-            }
             node.score = bestValue;
             return  bestValue;
         } else {
+            int bestValue = Integer.MAX_VALUE;
             for (TablutMove move : node.bs.getAllLegalMoves()) {
                 TablutBoardState cloneBS = (TablutBoardState) node.bs.clone();
                 cloneBS.processMove(move);
-                Node newNode = new Node(cloneBS, node, move);
-                node.addChild(newNode);
+                Node childNode = new Node(cloneBS, node, move);
+                bestValue = Math.min(bestValue, minimax(childNode, depth - 1, alpha, beta, maximizingPlayer));
+                beta = Math.min(beta, bestValue);
+                if (beta <= alpha) {
+                    break;
+                }
+                node.addChild(childNode);
             }
 
-            int bestValue = Integer.MAX_VALUE;
-            for(Node childNode: node.children) {
-                int value = minimax(childNode, depth - 1, maximizingPlayer);
-                bestValue = Math.min(bestValue, value);
-            }
             node.score = bestValue;
             return bestValue;
         }
