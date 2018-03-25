@@ -6,7 +6,6 @@ import tablut.TablutPlayer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends TablutPlayer {
-    Minimax MM = null;
     /**
      * You must modify this constructor to return your student number. This is
      * important, because this is what the code that runs the competition uses to
@@ -33,10 +32,6 @@ public class StudentPlayer extends TablutPlayer {
             }
         }
 
-        if (player_id == TablutBoardState.MUSCOVITE) {
-            return MuscoviteAttacker.getMove(bs);
-        } else {
-            return Minimax.getBestMove(bs, player_id);
-        }
+        return Minimax.getBestMove(bs, player_id);
     }
 }

@@ -1,11 +1,7 @@
 package student_player;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
 
 import boardgame.Move;
@@ -118,9 +114,9 @@ public class SwedeDefender {
 
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.SWEDE) {
-                return Integer.MAX_VALUE;
+                value += 100000;
             } else {
-                return Integer.MIN_VALUE;
+                value += -100000;
             }
         }
 
@@ -135,7 +131,7 @@ public class SwedeDefender {
         if (move.getEndPosition().x == kingPosition.x && move.getEndPosition().y == kingPosition.y) {
             value += 15 + move.getStartPosition().distance(move.getEndPosition()) ;
         }
-        List<Coord> freeCorners = MyTools.freeCorners(bs);
+        List<Coord> freeCorners = MyTools.getFreeCorners(bs);
 
         for(Coord freeCorner: freeCorners) {
             //Move away from cutoff corners

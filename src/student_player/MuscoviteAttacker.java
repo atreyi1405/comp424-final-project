@@ -6,15 +6,14 @@ import java.util.List;
 import boardgame.Move;
 import coordinates.Coord;
 import coordinates.Coordinates;
-import tablut.TablutBoard;
 import tablut.TablutBoardState;
 import tablut.TablutMove;
 
 public class MuscoviteAttacker {
 	public static Move getOpeningMove(TablutBoardState bs) {
-		List<TablutMove> openerMoves = bs.getLegalMovesForPosition(Coordinates.get(1, 4));
+		List<TablutMove> openerMoves = bs.getLegalMovesForPosition(Coordinates.get(4, 1));
 		for (TablutMove move : openerMoves) {
-			if (move.getEndPosition().x == 2 && move.getEndPosition().y == 4) {
+			if (move.getEndPosition().x == 2 && move.getEndPosition().y == 1) {
 				return move;
 			}
 		}
@@ -39,14 +38,22 @@ public class MuscoviteAttacker {
 
 		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
 
-		List<Coord> cutoffCorners = MyTools.cutOffCorners(bs);
+		List<Coord> cutoffCorners = MyTools.getCutoffCorners(bs);
+
+        List<Coord> powerPositions = MyTools.getMuscovitePowerPositions(bs);
+
+        for(Coord coord : powerPositions) {
+            if (coord.distance(bs.getKingPosition()) < 3) {
+                value += 100;
+            }
+        }
 
 		value += cutoffCorners.size() * 100;
 		if (bs.gameOver()) {
 			if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
-				return Integer.MAX_VALUE;
+				value += 100000;
 			} else {
-				return Integer.MIN_VALUE;
+				value += 100000;
 			}
 		}
 		return value;

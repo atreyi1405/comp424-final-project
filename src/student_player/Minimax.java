@@ -27,7 +27,7 @@ public class Minimax {
     }
 
     private static int minimax (Node node, int depth, int alpha, int beta, int maximizingPlayer) {
-        if (depth == 0) {
+        if (depth == 0 || node.bs.gameOver()) {
             int value;
             if (maximizingPlayer == TablutBoardState.SWEDE) {
                 value = SwedeDefender.evaluatePosition(node.bs, node.move);

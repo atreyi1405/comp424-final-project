@@ -72,7 +72,7 @@ public class MyTools {
         return neighbouringMoves;
     }
 
-    public static List<Coord> cutOffCorners(TablutBoardState bs) {
+    public static List<Coord> getCutoffCorners(TablutBoardState bs) {
         List<Coord> cutOffCorners = new ArrayList<>();
 
         for (int i = 0; i < 4; i ++) {
@@ -88,7 +88,7 @@ public class MyTools {
         return cutOffCorners;
     }
 
-    public static List<Coord> freeCorners(TablutBoardState bs) {
+    public static List<Coord> getFreeCorners(TablutBoardState bs) {
         List<Coord> freeCorners = new ArrayList<>();
 
         for (int i = 0; i < 4; i ++) {
@@ -102,5 +102,27 @@ public class MyTools {
         }
 
         return freeCorners;
+    }
+
+    public static List<Coord> getMuscovitePowerPositions(TablutBoardState bs) {
+        List<Coord> powerPositions = new ArrayList<>();
+
+        if(bs.getPieceAt(1, 1) == TablutBoardState.Piece.BLACK) {
+            powerPositions.add(Coordinates.get(1, 1));
+        }
+
+        if(bs.getPieceAt(1, 7) == TablutBoardState.Piece.BLACK) {
+            powerPositions.add(Coordinates.get(1, 7));
+        }
+
+        if(bs.getPieceAt(7, 1) == TablutBoardState.Piece.BLACK) {
+            powerPositions.add(Coordinates.get(7, 1));
+        }
+
+        if(bs.getPieceAt(7, 7) == TablutBoardState.Piece.BLACK) {
+            powerPositions.add(Coordinates.get(7, 7));
+        }
+
+        return powerPositions;
     }
 }
