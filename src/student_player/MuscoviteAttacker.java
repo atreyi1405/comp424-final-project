@@ -30,4 +30,21 @@ public class MuscoviteAttacker {
 		candidateMoves.add((TablutMove) bs.getRandomMove());
 		return candidateMoves;
 	}
+
+
+	public static int evaluatePosition(TablutBoardState bs) {
+		int value = 100;
+		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
+
+		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
+
+		if (bs.gameOver()) {
+			if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
+				return Integer.MAX_VALUE;
+			} else {
+				return Integer.MIN_VALUE;
+			}
+		}
+		return value;
+	}
 }

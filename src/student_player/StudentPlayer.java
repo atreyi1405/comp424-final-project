@@ -38,7 +38,7 @@ public class StudentPlayer extends TablutPlayer {
         if (player_id == TablutBoardState.MUSCOVITE) {
             return MuscoviteAttacker.getMove(bs);
         } else {
-            return MCTS.findNextMove(bs, 2000);
+            return Minimax.getBestMove(bs, player_id);
 //            return SwedeDefender.getMove(bs);
         }
     }

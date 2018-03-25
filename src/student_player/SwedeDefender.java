@@ -112,4 +112,25 @@ public class SwedeDefender {
             return bs.getAllLegalMoves();
         }
     }
+
+    public static int evaluatePosition(TablutBoardState bs) {
+	    int value = 100;
+	    value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
+
+        if (bs.gameOver()) {
+            if (bs.getWinner() == TablutBoardState.SWEDE) {
+                return Integer.MAX_VALUE;
+            } else {
+                return Integer.MIN_VALUE;
+            }
+        }
+
+        value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
+        Coord kingPosition = bs.getKingPosition();
+        if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8) {
+            value += 200;
+        }
+
+        return value;
+    }
 }

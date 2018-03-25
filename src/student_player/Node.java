@@ -12,7 +12,7 @@ public class Node {
     List<Node> children;
     int wins;
     int visitCount;
-    double score;
+    int score;
     Random random = new Random();
 
     public Node(TablutBoardState bs, Node parent, TablutMove move) {
