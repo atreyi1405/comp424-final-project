@@ -1,14 +1,13 @@
 package student_player;
 
 import boardgame.Move;
-import tablut.TablutBoard;
 import tablut.TablutBoardState;
 import tablut.TablutMove;
 
 import java.util.List;
 
 public class Minimax {
-    public static Move getBestMove(TablutBoardState bs, int playerID) {
+    public static Move getBestMove(TablutBoardState bs, int playerID, int depth) {
 
         int maxValue = Integer.MIN_VALUE;
         TablutMove best = (TablutMove) bs.getRandomMove();
@@ -17,7 +16,7 @@ public class Minimax {
             TablutBoardState cloneBS = (TablutBoardState) bs.clone();
             cloneBS.processMove(move);
             Node newNode = new Node(cloneBS, null, move);
-            int value = minimax(newNode, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, playerID);
+            int value = minimax(newNode, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, playerID);
             if (value > maxValue) {
                 maxValue = value;
                 best = move;
@@ -34,7 +33,7 @@ public class Minimax {
             } else {
                 value = MuscoviteAttacker.evaluatePosition(node.bs, node.move);
             }
-            node.score = value;
+            node.value = value;
             return value;
         }
 
@@ -53,7 +52,7 @@ public class Minimax {
                 node.addChild(childNode);
             }
 
-            node.score = bestValue;
+            node.value = bestValue;
             return  bestValue;
         } else {
             int bestValue = Integer.MAX_VALUE;
@@ -69,16 +68,8 @@ public class Minimax {
                 node.addChild(childNode);
             }
 
-            node.score = bestValue;
+            node.value = bestValue;
             return bestValue;
-        }
-    }
-
-    public List<TablutMove> getCandidateMoves(TablutBoardState bs) {
-        if (bs.getTurnPlayer() == TablutBoardState.SWEDE) {
-            return SwedeDefender.getCandidateMoves(bs);
-        } else {
-            return MuscoviteAttacker.getCandidateMoves(bs);
         }
     }
 }

@@ -109,16 +109,17 @@ public class SwedeDefender {
     }
 
     public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
-	    int value = 1000;
-	    value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
-
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.SWEDE) {
-                value += 100000;
+                return 100000;
             } else {
-                value += -100000;
+                return -100000;
             }
         }
+
+        int value = 1000;
+        value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
+
 
         value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
         Coord kingPosition = bs.getKingPosition();

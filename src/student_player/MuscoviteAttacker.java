@@ -33,29 +33,81 @@ public class MuscoviteAttacker {
 
 
 	public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
-		int value = 100;
-		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
+        if (bs.gameOver()) {
+            if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
+                return 100000;
+            } else {
+                return -100000;
+            }
+        }
 
-		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
+	    int value = 100;
+		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 30;
+
+		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 20;
 
 		List<Coord> cutoffCorners = MyTools.getCutoffCorners(bs);
 
         List<Coord> powerPositions = MyTools.getMuscovitePowerPositions(bs);
 
         for(Coord coord : powerPositions) {
-            if (coord.distance(bs.getKingPosition()) < 3) {
-                value += 100;
+            //Reward power positions, even greater if they are near the king
+            value += 10;
+            if (coord.distance(bs.getKingPosition()) <= 3) {
+                value += 15;
             }
         }
 
-		value += cutoffCorners.size() * 100;
-		if (bs.gameOver()) {
-			if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
-				value += 100000;
-			} else {
-				value += 100000;
-			}
-		}
+        value += 7 * getPartialCutoffCornerCount(bs, powerPositions);
+
+		value += cutoffCorners.size() * 30;
+
 		return value;
 	}
+
+	public static int getPartialCutoffCornerCount(TablutBoardState bs, List<Coord> powerPositions) {
+	    int count = 0;
+	    for(Coord coord: powerPositions) {
+	        if(coord.x == 1 && coord.y == 1) {
+	            if (bs.getPieceAt(0, 2) == TablutBoardState.Piece.BLACK) {
+	                count++;
+                }
+                if (bs.getPieceAt(2, 0) == TablutBoardState.Piece.BLACK) {
+	                count++;
+                }
+            }
+
+            if(coord.x == 7 && coord.y == 1) {
+                if (bs.getPieceAt(6, 0) == TablutBoardState.Piece.BLACK ) {
+                    count++;
+                }
+
+                if (bs.getPieceAt(8, 2) == TablutBoardState.Piece.BLACK) {
+                    count++;
+                }
+            }
+
+            if(coord.x == 1 && coord.y == 7) {
+                if (bs.getPieceAt(0, 6) == TablutBoardState.Piece.BLACK) {
+                    count ++;
+                }
+
+                if(bs.getPieceAt(2, 8) == TablutBoardState.Piece.BLACK) {
+                    count ++;
+                }
+            }
+
+            if(coord.x == 7 && coord.y == 7) {
+                if (bs.getPieceAt(6, 8) == TablutBoardState.Piece.BLACK ) {
+                    count ++;
+                }
+
+                if (bs.getPieceAt(8, 6) == TablutBoardState.Piece.BLACK) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
 }

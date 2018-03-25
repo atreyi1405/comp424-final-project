@@ -24,14 +24,14 @@ public class StudentPlayer extends TablutPlayer {
         // You probably will make separate functions in MyTools.
         // For example, maybe you'll need to load some pre-processed best opening
         // strategies...
-        if (bs.getTurnNumber() == 1) {
-            if (player_id == TablutBoardState.MUSCOVITE) {
-                return MuscoviteAttacker.getOpeningMove(bs);
-            } else {
-                return SwedeDefender.getOpeningMove(bs);
-            }
-        }
+//        if (bs.getTurnNumber() == 1) {
+//            if (player_id == TablutBoardState.MUSCOVITE) {
+//                return MuscoviteAttacker.getOpeningMove(bs);
+//            } else {
+//                return SwedeDefender.getOpeningMove(bs);
+//            }
+//        }
 
-        return Minimax.getBestMove(bs, player_id);
+        return Minimax.getBestMove(bs, player_id, 2);
     }
 }
