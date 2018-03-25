@@ -6,7 +6,7 @@ import tablut.TablutPlayer;
 
 /** A player file submitted by a student. */
 public class StudentPlayer extends TablutPlayer {
-    MonteCarloTreeSearch MCTS = null;
+    Minimax MM = null;
     /**
      * You must modify this constructor to return your student number. This is
      * important, because this is what the code that runs the competition uses to
@@ -26,11 +26,10 @@ public class StudentPlayer extends TablutPlayer {
         // For example, maybe you'll need to load some pre-processed best opening
         // strategies...
         if (bs.getTurnNumber() == 1) {
+            MM = new Minimax(bs, player_id);
             if (player_id == TablutBoardState.MUSCOVITE) {
-                MCTS = new MonteCarloTreeSearch(bs, TablutBoardState.MUSCOVITE);
                 return MuscoviteAttacker.getOpeningMove(bs);
             } else {
-                MCTS = new MonteCarloTreeSearch(bs, TablutBoardState.SWEDE);
                 return SwedeDefender.getOpeningMove(bs);
             }
         }
@@ -38,8 +37,7 @@ public class StudentPlayer extends TablutPlayer {
         if (player_id == TablutBoardState.MUSCOVITE) {
             return MuscoviteAttacker.getMove(bs);
         } else {
-            return Minimax.getBestMove(bs, player_id);
-//            return SwedeDefender.getMove(bs);
+            return MM.getBestMove(bs, 3);
         }
     }
 }
