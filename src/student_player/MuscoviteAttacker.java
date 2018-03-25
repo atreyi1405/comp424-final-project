@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boardgame.Move;
+import coordinates.Coord;
 import coordinates.Coordinates;
 import tablut.TablutBoard;
 import tablut.TablutBoardState;
@@ -38,7 +39,9 @@ public class MuscoviteAttacker {
 
 		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
 
-		value += MyTools.cutOffCornerCount(bs) * 10;
+		List<Coord> cutoffCorners = MyTools.cutOffCorners(bs);
+
+		value += cutoffCorners.size() * 100;
 		if (bs.gameOver()) {
 			if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
 				return Integer.MAX_VALUE;

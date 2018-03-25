@@ -113,7 +113,7 @@ public class SwedeDefender {
     }
 
     public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
-	    int value = 100;
+	    int value = 1000;
 	    value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
 
         if (bs.gameOver()) {
@@ -128,13 +128,24 @@ public class SwedeDefender {
         Coord kingPosition = bs.getKingPosition();
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8) {
             value += 100;
-            //Slightly favour moves that move the king, even if its to another wall
-            if (move.getEndPosition().x == kingPosition.x && move.getEndPosition().y == kingPosition.y) {
-                value++;
+
+        }
+
+        //Slightly favour moves that move the king, especially in the early game
+        if (move.getEndPosition().x == kingPosition.x && move.getEndPosition().y == kingPosition.y) {
+            value += 15 + move.getStartPosition().distance(move.getEndPosition()) ;
+        }
+        List<Coord> freeCorners = MyTools.freeCorners(bs);
+
+        for(Coord freeCorner: freeCorners) {
+            //Move away from cutoff corners
+            if (bs.getKingPosition().distance(freeCorner) < 5) {
+                value += 30;
+                continue;
             }
         }
 
-        value -= MyTools.cutOffCornerCount(bs) * 10;
+
         value -= Coordinates.distanceToClosestCorner(bs.getKingPosition());
 
         return value;

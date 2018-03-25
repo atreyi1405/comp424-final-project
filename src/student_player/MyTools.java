@@ -72,18 +72,35 @@ public class MyTools {
         return neighbouringMoves;
     }
 
-    public static int cutOffCornerCount(TablutBoardState bs) {
-        int cornerCount = 0;
+    public static List<Coord> cutOffCorners(TablutBoardState bs) {
+        List<Coord> cutOffCorners = new ArrayList<>();
 
         for (int i = 0; i < 4; i ++) {
             int x = i/2;
             int y = i % 2;
             if (bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 2 : 6, y == 0 ? 0 : 8)) &&
-                    bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 1 : 7, y == 0 ? 1 : 7)) && bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 0 : 8, y == 0 ? 2 : 6))) {
-                cornerCount ++;
+                bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 1 : 7, y == 0 ? 1 : 7)) &&
+                bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 0 : 8, y == 0 ? 2 : 6))) {
+                cutOffCorners.add(Coordinates.get(x==0 ? 0 : 8, y == 0 ? 0 : 8));
             }
         }
 
-        return cornerCount;
+        return cutOffCorners;
+    }
+
+    public static List<Coord> freeCorners(TablutBoardState bs) {
+        List<Coord> freeCorners = new ArrayList<>();
+
+        for (int i = 0; i < 4; i ++) {
+            int x = i/2;
+            int y = i % 2;
+            if (!(bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 2 : 6, y == 0 ? 0 : 8)) &&
+                    bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 1 : 7, y == 0 ? 1 : 7)) &&
+                    bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 0 : 8, y == 0 ? 2 : 6)))) {
+                freeCorners.add(Coordinates.get(x==0 ? 0 : 8, y == 0 ? 0 : 8));
+            }
+        }
+
+        return freeCorners;
     }
 }

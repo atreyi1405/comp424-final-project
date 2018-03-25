@@ -26,7 +26,6 @@ public class StudentPlayer extends TablutPlayer {
         // For example, maybe you'll need to load some pre-processed best opening
         // strategies...
         if (bs.getTurnNumber() == 1) {
-            MM = new Minimax(bs, player_id);
             if (player_id == TablutBoardState.MUSCOVITE) {
                 return MuscoviteAttacker.getOpeningMove(bs);
             } else {
@@ -37,7 +36,7 @@ public class StudentPlayer extends TablutPlayer {
         if (player_id == TablutBoardState.MUSCOVITE) {
             return MuscoviteAttacker.getMove(bs);
         } else {
-            return MM.getBestMove(bs, 3);
+            return Minimax.getBestMove(bs, player_id);
         }
     }
 }
