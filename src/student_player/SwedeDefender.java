@@ -1,5 +1,7 @@
 package student_player;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,13 +40,76 @@ public class SwedeDefender {
 
 	public static Move getMove(TablutBoardState bs) {
 	    Random random = new Random();
-        List<TablutMove> safeMoves = MyTools.getSafeMoves(bs, bs.getAllLegalMoves());
-        Move captureMove = MyTools.getCaptureMove(bs, safeMoves);
 
+        List<TablutMove> filteredKingMoves = MyTools.getSafeMoves(bs, bs.getLegalMovesForPosition(bs.getKingPosition()));
+        int shortestManhattan = Integer.MAX_VALUE;
+        int longestTrip = Integer.MIN_VALUE;
+
+        TablutMove longestTripMove = (TablutMove) bs.getRandomMove();
+        TablutMove shortestManhattanMove = (TablutMove) bs.getRandomMove();
+
+        for (TablutMove move : filteredKingMoves) {
+            //Always choose win if possible
+            if (Coordinates.isCorner(move.getEndPosition())) {
+                return move;
+            }
+            int distance = move.getStartPosition().distance(move.getEndPosition());
+            if ( distance > longestTrip) {
+                longestTripMove = move;
+                longestTrip = distance;
+            }
+
+            if (Coordinates.distanceToClosestCorner(move.getEndPosition()) < shortestManhattan) {
+                shortestManhattanMove = move;
+                shortestManhattan = Coordinates.distanceToClosestCorner(move.getEndPosition());
+            }
+        }
+
+        List<TablutMove> safeMoves = MyTools.getSafeMoves(bs, bs.getAllLegalMoves());
+
+        Move captureMove = MyTools.getCaptureMove(bs, safeMoves);
         if (captureMove != null) {
             return captureMove;
         }
+        if (random.nextInt(1) == 0 && filteredKingMoves.size() > 0) {
+            if (random.nextInt(1) == 0 ) {
+                return shortestManhattanMove;
+            } else {
+                return longestTripMove;
+            }
+        } else if(safeMoves.size() > 0) {
+            return safeMoves.get(random.nextInt(safeMoves.size()));
+        } else {
+            return bs.getRandomMove();
 
-        return safeMoves.get(random.nextInt(safeMoves.size()));
+        }
+    }
+
+    public static List<TablutMove> getCandidateMoves(TablutBoardState bs) {
+	    List<TablutMove> candidateMoves = new ArrayList<>();
+        List<TablutMove> filteredKingMoves = MyTools.getSafeMoves(bs, bs.getLegalMovesForPosition(bs.getKingPosition()));
+
+        for (TablutMove kingMove : filteredKingMoves) {
+
+            //Always choose win if possible
+            if (Coordinates.isCorner(kingMove.getEndPosition())) {
+                candidateMoves.add(kingMove);
+                return candidateMoves;
+            }
+        }
+
+
+        Move captureMove = MyTools.getCaptureMove(bs, bs.getAllLegalMoves());
+        if (captureMove != null) {
+            candidateMoves.add((TablutMove) captureMove);
+            return candidateMoves;
+        }
+
+        List<TablutMove> safeMoves = MyTools.getSafeMoves(bs, bs.getAllLegalMoves());
+        if(safeMoves.size() > 0) {
+            return MyTools.getSafeMoves(bs, bs.getAllLegalMoves());
+        } else {
+            return bs.getAllLegalMoves();
+        }
     }
 }

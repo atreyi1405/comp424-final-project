@@ -3,9 +3,7 @@ package student_player;
 import tablut.TablutBoardState;
 import tablut.TablutMove;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Node {
     TablutBoardState bs;
@@ -13,7 +11,6 @@ public class Node {
     Node parent;
     List<Node> children;
     int wins;
-    int losses;
     int visitCount;
     double score;
     Random random = new Random();
@@ -24,23 +21,10 @@ public class Node {
         this.parent = parent;
         this.move = move;
         this.wins = 0;
-        this.losses = 0;
         this.visitCount = 0;
     }
 
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
-    public void addScore(double score) {
-        this.score += score;
-    }
-
-    public void addVisit() {
+    public void incrementVisit() {
         this.visitCount++;
     }
 
@@ -52,16 +36,8 @@ public class Node {
         return wins;
     }
 
-    public void addWin() {
+    public void incrementWin() {
         this.wins++;
-    }
-
-    public int getLoses() {
-        return losses;
-    }
-
-    public void addLoss() {
-        this.losses++;
     }
 
     public Node getRandomChildNode() {
@@ -73,16 +49,9 @@ public class Node {
     }
 
     public Node getChildWithMaxScore() {
-        Node maxNode = this.children.get(0);
-        double max = Integer.MIN_VALUE;
-        for (Node node : this.children) {
-            if(node.getScore() > max) {
-                maxNode = node;
-                max = node.getScore();
-            }
-        }
-
-        return maxNode;
+        return Collections.max(
+                this.children,
+                Comparator.comparing(c -> c.getVisits() > 0 ? c.getWins()/c.getVisits() : 0));
     }
 }
 
