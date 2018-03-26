@@ -4,25 +4,40 @@ import boardgame.Move;
 import tablut.TablutBoardState;
 import tablut.TablutMove;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Minimax {
     public static Move getBestMove(TablutBoardState bs, int playerID, int depth) {
-
         int maxValue = Integer.MIN_VALUE;
-        TablutMove best = (TablutMove) bs.getRandomMove();
-        List<TablutMove> legalMoves = bs.getAllLegalMoves();
-        for (TablutMove move : legalMoves) {
+
+        List<TablutMove> bestMoves = new ArrayList<>();
+
+        for (TablutMove move : bs.getAllLegalMoves()) {
             TablutBoardState cloneBS = (TablutBoardState) bs.clone();
             cloneBS.processMove(move);
             Node newNode = new Node(cloneBS, null, move);
             int value = minimax(newNode, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, playerID);
             if (value > maxValue) {
                 maxValue = value;
-                best = move;
+                //clear best moves, we have a better group
+                bestMoves.clear();
+                bestMoves.add(move);
+            }
+            //If move is equally as good, add to list
+            if( value == maxValue) {
+                bestMoves.add(move);
             }
         }
-        return best;
+
+        //If multiple best moves, chose a random one
+        if (bestMoves.size() > 0) {
+            Random random = new Random();
+            return bestMoves.get(random.nextInt(bestMoves.size()));
+        } else {
+            return bs.getRandomMove();
+        }
     }
 
     private static int minimax (Node node, int depth, int alpha, int beta, int maximizingPlayer) {
