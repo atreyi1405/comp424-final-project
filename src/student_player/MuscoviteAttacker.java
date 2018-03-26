@@ -35,7 +35,7 @@ public class MuscoviteAttacker {
 	public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
-                return 100000;
+                return 100000 - bs.getTurnNumber();
             } else {
                 return -100000;
             }
@@ -50,13 +50,19 @@ public class MuscoviteAttacker {
 
         List<Coord> powerPositions = MyTools.getMuscovitePowerPositions(bs);
 
+
         for(Coord coord : powerPositions) {
             //Reward power positions, even greater if they are near the king
             value += 10;
             if (coord.distance(bs.getKingPosition()) <= 3) {
-                value += 15;
+                value += 40;
             }
         }
+
+        //Don't let the king get to a a wall
+        Coord kingPosition = bs.getKingPosition();
+        if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8)
+            value -= 100;
 
         value += 7 * getPartialCutoffCornerCount(bs, powerPositions);
 
