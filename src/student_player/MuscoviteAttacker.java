@@ -21,17 +21,6 @@ public class MuscoviteAttacker {
 		return null;
 	}
 
-	public static Move getMove(TablutBoardState bs) {
-		return bs.getRandomMove();
-	}
-
-	public static List<TablutMove>  getCandidateMoves(TablutBoardState bs) {
-		List<TablutMove> candidateMoves = new ArrayList<>();
-		candidateMoves.add((TablutMove) bs.getRandomMove());
-		return candidateMoves;
-	}
-
-
 	public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
