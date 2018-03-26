@@ -21,9 +21,6 @@ public class StudentPlayer extends TablutPlayer {
      * make decisions.
      */
     public Move chooseMove(TablutBoardState bs) {
-        // You probably will make separate functions in MyTools.
-        // For example, maybe you'll need to load some pre-processed best opening
-        // strategies...
         if (bs.getTurnNumber() == 1) {
             if (player_id == TablutBoardState.MUSCOVITE) {
                 return MuscoviteAttacker.getOpeningMove(bs);

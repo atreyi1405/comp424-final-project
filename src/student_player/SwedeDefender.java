@@ -25,27 +25,26 @@ public class SwedeDefender {
         }
 
         int value = 1000;
-        value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 5;
-
-
-        value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
+        //Swedes prefer trades as it frees up the board
+        value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 20;
+        value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 30;
 
         //Favour moves that move the king to a wall
         Coord kingPosition = bs.getKingPosition();
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8)
-            value += 100;
+            value += 60;
 
-        //Slightly favour moves that move the king, especially in the early game
+        //Slightly favour moves that move the king
         if (move.getEndPosition().x == kingPosition.x && move.getEndPosition().y == kingPosition.y) {
-            value += 15 + move.getStartPosition().distance(move.getEndPosition()) ;
+            value += 3;
         }
-        List<Coord> freeCorners = MyTools.getFreeCorners(bs);
 
+        List<Coord> freeCorners = MyTools.getFreeCorners(bs);
+        //Reward the Swede's for moving towards
         for(Coord freeCorner: freeCorners) {
             //Move away from cutoff corners
             if (bs.getKingPosition().distance(freeCorner) < 5) {
-                value += 30;
-                continue;
+                value += 15;
             }
         }
 
