@@ -11,14 +11,7 @@ import tablut.TablutMove;
 
 public class MuscoviteAttacker {
 	public static Move getOpeningMove(TablutBoardState bs) {
-		List<TablutMove> openerMoves = bs.getLegalMovesForPosition(Coordinates.get(4, 1));
-		for (TablutMove move : openerMoves) {
-			if (move.getEndPosition().x == 2 && move.getEndPosition().y == 1) {
-				return move;
-			}
-		}
-		
-		return null;
+        return Minimax.getBestMove(bs, TablutBoardState.MUSCOVITE, 2);
 	}
 
 	public static int evaluatePosition(TablutBoardState bs, TablutMove move) {

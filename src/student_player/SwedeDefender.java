@@ -12,27 +12,8 @@ import tablut.TablutMove;
 
 public class SwedeDefender {
 	public static Move getOpeningMove(TablutBoardState bs) {
-		Move currentMove = bs.getRandomMove();
-        List<TablutMove> allMoves = bs.getAllLegalMoves();
-
-        Move captureMove = MyTools.getCaptureMove(bs, allMoves);
-
-        if (captureMove != null) {
-            return captureMove;
-        }
-
-        List<TablutMove> safeMoves = MyTools.getSafeMoves(bs, allMoves);
-
-		for (TablutMove move : safeMoves ) {
-		    Coord start = move.getStartPosition();
-
-			if (Coordinates.isCenterOrNeighborCenter(start) && start.distance(move.getEndPosition()) == 2) {
-				currentMove = move;
-			}
-		}
-		
-		return currentMove;
-	}
+        return Minimax.getBestMove(bs, TablutBoardState.SWEDE, 2);
+    }
 
     public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
         if (bs.gameOver()) {
