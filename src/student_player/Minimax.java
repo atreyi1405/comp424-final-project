@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Minimax {
     public static Move getBestMove(TablutBoardState bs, int playerID, int depth) {
-        int maxValue = Integer.MIN_VALUE;
+        double maxValue = Integer.MIN_VALUE;
 
         List<TablutMove> bestMoves = new ArrayList<>();
 
@@ -18,7 +18,7 @@ public class Minimax {
             TablutBoardState cloneBS = (TablutBoardState) bs.clone();
             cloneBS.processMove(move);
             Node newNode = new Node(cloneBS, null, move);
-            int value = minimax(newNode, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, playerID);
+            double value = minimax(newNode, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, playerID);
             if (value > maxValue) {
                 maxValue = value;
                 //clear best moves, we have a better group
@@ -40,9 +40,9 @@ public class Minimax {
         }
     }
 
-    private static int minimax (Node node, int depth, int alpha, int beta, int maximizingPlayer) {
+    private static double minimax (Node node, int depth, double alpha, double beta, int maximizingPlayer) {
         if (depth == 0 || node.bs.gameOver()) {
-            int value;
+            double value;
             if (maximizingPlayer == TablutBoardState.SWEDE) {
                 value = SwedeDefender.evaluatePosition(node.bs, node.move);
             } else {
@@ -53,7 +53,7 @@ public class Minimax {
         }
 
         if (node.bs.getTurnPlayer() == maximizingPlayer) {
-            int bestValue = Integer.MIN_VALUE;
+            double bestValue = Integer.MIN_VALUE;
 
             for (TablutMove move : node.bs.getAllLegalMoves()) {
                 TablutBoardState cloneBS = (TablutBoardState) node.bs.clone();
@@ -70,7 +70,7 @@ public class Minimax {
             node.value = bestValue;
             return  bestValue;
         } else {
-            int bestValue = Integer.MAX_VALUE;
+            double bestValue = Integer.MAX_VALUE;
             for (TablutMove move : node.bs.getAllLegalMoves()) {
                 TablutBoardState cloneBS = (TablutBoardState) node.bs.clone();
                 cloneBS.processMove(move);

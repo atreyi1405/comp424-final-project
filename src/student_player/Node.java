@@ -10,7 +10,7 @@ public class Node {
     TablutMove move;
     Node parent;
     List<Node> children;
-    int value;
+    double value;
 
     public Node(TablutBoardState bs, Node parent, TablutMove move) {
         this.children = new ArrayList<>();

@@ -14,7 +14,7 @@ public class MuscoviteAttacker {
         return Minimax.getBestMove(bs, TablutBoardState.MUSCOVITE, 2);
 	}
 
-	public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
+	public static double evaluatePosition(TablutBoardState bs, TablutMove move) {
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.MUSCOVITE) {
                 return 100000 - bs.getTurnNumber();
@@ -23,7 +23,7 @@ public class MuscoviteAttacker {
             }
         }
 
-	    int value = 100;
+	    double value = 1000;
         //Muscovites reward keeping our own pieces rather than taking the Swedes
 		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 30;
 		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 20;

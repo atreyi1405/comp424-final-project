@@ -15,7 +15,7 @@ public class SwedeDefender {
         return Minimax.getBestMove(bs, TablutBoardState.SWEDE, 2);
     }
 
-    public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
+    public static double evaluatePosition(TablutBoardState bs, TablutMove move) {
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.SWEDE) {
                 return 100000 - bs.getTurnNumber();
@@ -24,7 +24,7 @@ public class SwedeDefender {
             }
         }
 
-        int value = 1000;
+        double value = 1000;
         //Swedes prefer trades as it frees up the board
         value += bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 20;
         value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 30;
