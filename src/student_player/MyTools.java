@@ -78,9 +78,11 @@ public class MyTools {
         for (int i = 0; i < 4; i ++) {
             int x = i/2;
             int y = i % 2;
-            if (bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 2 : 6, y == 0 ? 0 : 8)) &&
-                bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 1 : 7, y == 0 ? 1 : 7)) &&
-                bs.turnPlayerCanMoveFrom(Coordinates.get(x == 0 ? 0 : 8, y == 0 ? 2 : 6))) {
+            if (bs.getPieceAt(Coordinates.get(x == 0 ? 2 : 6, y == 0 ? 0 : 8)) == TablutBoardState.Piece.BLACK &&
+                bs.getPieceAt(Coordinates.get(x == 0 ? 1 : 7, y == 0 ? 1 : 7)) == TablutBoardState.Piece.BLACK &&
+                bs.getPieceAt(Coordinates.get(x == 0 ? 0 : 8, y == 0 ? 2 : 6)) == TablutBoardState.Piece.BLACK &&
+                bs.getPieceAt(Coordinates.get(x == 0 ? 0 : 8, y == 0 ? 1 : 7)) == TablutBoardState.Piece.EMPTY &&
+                bs.getPieceAt(Coordinates.get(x == 0 ? 1 : 7, y == 0 ? 0 : 8)) == TablutBoardState.Piece.EMPTY) {
                 cutOffCorners.add(Coordinates.get(x==0 ? 0 : 8, y == 0 ? 0 : 8));
             }
         }
