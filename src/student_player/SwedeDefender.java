@@ -32,10 +32,8 @@ public class SwedeDefender {
 
         //Favour moves that move the king to a wall
         Coord kingPosition = bs.getKingPosition();
-        if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8) {
+        if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8)
             value += 100;
-
-        }
 
         //Slightly favour moves that move the king, especially in the early game
         if (move.getEndPosition().x == kingPosition.x && move.getEndPosition().y == kingPosition.y) {
