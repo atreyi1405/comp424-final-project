@@ -111,7 +111,7 @@ public class SwedeDefender {
     public static int evaluatePosition(TablutBoardState bs, TablutMove move) {
         if (bs.gameOver()) {
             if (bs.getWinner() == TablutBoardState.SWEDE) {
-                return 100000;
+                return 100000 - bs.getTurnNumber();
             } else {
                 return -100000;
             }
@@ -122,6 +122,8 @@ public class SwedeDefender {
 
 
         value -= bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 10;
+
+        //Favour moves that move the king to a wall
         Coord kingPosition = bs.getKingPosition();
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8) {
             value += 100;
