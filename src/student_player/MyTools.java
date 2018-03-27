@@ -12,66 +12,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class MyTools {
-    //Get all the moves that don't result in an immediate capture
-    public static List<TablutMove> getSafeMoves(TablutBoardState bs, List<TablutMove> moves) {
-        ArrayList<TablutMove> safeMoves = new ArrayList<>();
-        for (TablutMove currentMove : moves) {
-            TablutBoardState cloneBS = (TablutBoardState) bs.clone();
-            int oldNumberOfPlayerPieces = cloneBS.getNumberPlayerPieces(bs.getTurnPlayer());
-            cloneBS.processMove(currentMove);
-            List<TablutMove> opponentMoves = getAllNeighbouringOpponentMoves(cloneBS);
-            boolean didCapture = false;
-            for (TablutMove opponentMove: opponentMoves) {
-                TablutBoardState cloneBS2 = (TablutBoardState) cloneBS.clone();
-                cloneBS2.processMove(opponentMove);
-                int newNumberOfPlayerPieces = cloneBS2.getNumberPlayerPieces(bs.getTurnPlayer());
-                if (newNumberOfPlayerPieces < oldNumberOfPlayerPieces) {
-                    didCapture = true;
-                }
-            }
-            if (!didCapture) {
-                safeMoves.add(currentMove);
-            }
-            didCapture = false;
-
-        }
-        return safeMoves;
-    }
-
-    public static Move getCaptureMove(TablutBoardState bs, List<TablutMove> moves) {
-        Move captureMove = null;
-        int minNumberOfOpponentPieces = bs.getNumberPlayerPieces(bs.getOpponent());
-        for (TablutMove currentMove : moves) {
-            TablutBoardState cloneBS = (TablutBoardState) bs.clone();
-            cloneBS.processMove(currentMove);
-            int newNumberOfOpponentPieces = cloneBS.getNumberPlayerPieces(bs.getOpponent());
-            if (newNumberOfOpponentPieces < minNumberOfOpponentPieces) {
-                captureMove = currentMove;
-            }
-        }
-
-        return captureMove;
-    }
-
-    public static List<TablutMove> getAllNeighbouringOpponentMoves(TablutBoardState bs) {
-        List<TablutMove> neighbouringMoves = new ArrayList<>();
-        HashSet<Coord> opponentCoords = bs.getOpponentPieceCoordinates();
-        Hashtable<String, Coord> neighbourCoords = new Hashtable<>();
-        for (Coord coord : opponentCoords) {
-            for (Coord neighbourCoord: Coordinates.getNeighbors(coord)) {
-                neighbourCoords.put(String.format("%d%d", neighbourCoord.x, neighbourCoord.y), neighbourCoord);
-            }
-        }
-        for (TablutMove move: bs.getAllLegalMoves()) {
-            Coord coord = move.getEndPosition();
-            if (neighbourCoords.containsKey(String.format("%d%d", coord.x, coord.y))) {
-                neighbouringMoves.add(move);
-            }
-        }
-
-        return neighbouringMoves;
-    }
-
     public static List<Coord> getCutoffCorners(TablutBoardState bs) {
         List<Coord> cutOffCorners = new ArrayList<>();
 
@@ -109,22 +49,73 @@ public class MyTools {
     public static List<Coord> getMuscovitePowerPositions(TablutBoardState bs) {
         List<Coord> powerPositions = new ArrayList<>();
 
-        if(bs.getPieceAt(1, 1) == TablutBoardState.Piece.BLACK) {
+        if(bs.getPieceAt(1, 1) == TablutBoardState.Piece.BLACK)
             powerPositions.add(Coordinates.get(1, 1));
-        }
 
-        if(bs.getPieceAt(1, 7) == TablutBoardState.Piece.BLACK) {
+        if(bs.getPieceAt(1, 7) == TablutBoardState.Piece.BLACK)
             powerPositions.add(Coordinates.get(1, 7));
-        }
 
-        if(bs.getPieceAt(7, 1) == TablutBoardState.Piece.BLACK) {
+        if(bs.getPieceAt(7, 1) == TablutBoardState.Piece.BLACK)
             powerPositions.add(Coordinates.get(7, 1));
-        }
 
-        if(bs.getPieceAt(7, 7) == TablutBoardState.Piece.BLACK) {
+        if(bs.getPieceAt(7, 7) == TablutBoardState.Piece.BLACK)
             powerPositions.add(Coordinates.get(7, 7));
-        }
 
         return powerPositions;
+    }
+
+    public static boolean isCoordPowerPosition(Coord coord) {
+        if(coord.maxDifference(Coordinates.get(1, 1)) == 0)
+            return true;
+
+        if(coord.maxDifference(Coordinates.get(1, 7)) == 0)
+            return true;
+
+        if(coord.maxDifference(Coordinates.get(7, 1)) == 0)
+            return true;
+
+        if(coord.maxDifference(Coordinates.get(7, 7)) == 0)
+            return true;
+
+        return false;
+    }
+
+    public static List<Coord> getPartialCutoffCornerCoords(TablutBoardState bs, List<Coord> powerPositions) {
+        List<Coord> partialCutoffCoords = new ArrayList<>();
+        for(Coord coord: powerPositions) {
+            if(coord.x == 1 && coord.y == 1) {
+                if (bs.getPieceAt(0, 2) == TablutBoardState.Piece.BLACK)
+                    partialCutoffCoords.add(Coordinates.get(0, 2));
+
+                if (bs.getPieceAt(2, 0) == TablutBoardState.Piece.BLACK)
+                    partialCutoffCoords.add(Coordinates.get(2, 0));
+            }
+
+            if(coord.x == 7 && coord.y == 1) {
+                if (bs.getPieceAt(6, 0) == TablutBoardState.Piece.BLACK )
+                    partialCutoffCoords.add(Coordinates.get(6, 0));
+
+                if (bs.getPieceAt(8, 2) == TablutBoardState.Piece.BLACK)
+                    partialCutoffCoords.add(Coordinates.get(8, 2));
+            }
+
+            if(coord.x == 1 && coord.y == 7) {
+                if (bs.getPieceAt(0, 6) == TablutBoardState.Piece.BLACK)
+                    partialCutoffCoords.add(Coordinates.get(0, 6));
+
+                if(bs.getPieceAt(2, 8) == TablutBoardState.Piece.BLACK)
+                    partialCutoffCoords.add(Coordinates.get(2, 8));
+            }
+
+            if(coord.x == 7 && coord.y == 7) {
+                if (bs.getPieceAt(6, 8) == TablutBoardState.Piece.BLACK )
+                    partialCutoffCoords.add(Coordinates.get(6, 8));
+
+                if (bs.getPieceAt(8, 6) == TablutBoardState.Piece.BLACK)
+                    partialCutoffCoords.add(Coordinates.get(8, 6));
+            }
+        }
+
+        return partialCutoffCoords;
     }
 }
