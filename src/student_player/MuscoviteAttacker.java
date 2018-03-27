@@ -46,8 +46,8 @@ public class MuscoviteAttacker {
         }
 
         //Reward the muscovites for building partial barricades, enroute to entirely barricading a corner
-        value += 7 * getPartialCutoffCornerCount(bs, powerPositions);
-
+        List<Coord> partialCutOffCornerCoords = MyTools.getPartialCutoffCornerCoords(bs, powerPositions);
+        value += 7 * partialCutOffCornerCoords.size();
 
         //Don't let the king get to a a wall
         Coord kingPosition = bs.getKingPosition();
