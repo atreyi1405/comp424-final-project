@@ -35,6 +35,7 @@ public class MuscoviteAttacker {
 
 		//Get power positions
         List<Coord> powerPositions = MyTools.getMuscovitePowerPositions(bs);
+        Coord kingPosition = bs.getKingPosition();
 
 
         for(Coord coord : powerPositions) {
@@ -46,11 +47,10 @@ public class MuscoviteAttacker {
         }
 
         //Reward the muscovites for building partial barricades, enroute to entirely barricading a corner
-        List<Coord> partialCutOffCornerCoords = MyTools.getPartialCutoffCornerCoords(bs, powerPositions);
+        List<Coord> partialCutOffCornerCoords = MyTools.getMuscovitePartialCutoffCornerCoords(bs, powerPositions);
         value += 7 * partialCutOffCornerCoords.size();
 
         //Don't let the king get to a a wall
-        Coord kingPosition = bs.getKingPosition();
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8)
             value -= 100;
 

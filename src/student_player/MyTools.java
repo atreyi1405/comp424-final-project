@@ -80,7 +80,7 @@ public class MyTools {
         return false;
     }
 
-    public static List<Coord> getPartialCutoffCornerCoords(TablutBoardState bs, List<Coord> powerPositions) {
+    public static List<Coord> getMuscovitePartialCutoffCornerCoords(TablutBoardState bs, List<Coord> powerPositions) {
         List<Coord> partialCutoffCoords = new ArrayList<>();
         for(Coord coord: powerPositions) {
             if(coord.x == 1 && coord.y == 1) {
