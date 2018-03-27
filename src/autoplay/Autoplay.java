@@ -1,6 +1,12 @@
 package autoplay;
 
+import boardgame.Server;
+
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 //Author: Lilly Tong, Eric Crawford
 //
@@ -21,7 +27,10 @@ import java.io.IOException;
 //
 public class Autoplay {
     public static void main(String args[]) {
+        File logs = new File("/Users/callum/projects/comp424-final-project/" + Server.log_dir);
+        deleteDir(logs);
         int n_games;
+
         try {
             n_games = Integer.parseInt(args[0]);
             if (n_games < 1) {
@@ -34,17 +43,17 @@ public class Autoplay {
         }
 
         try {
-            ProcessBuilder server_pb = new ProcessBuilder("java", "-cp", "bin", "boardgame.Server", "-ng", "-k");
+            ProcessBuilder server_pb = new ProcessBuilder("java", "-cp", "bin", "boardgame.Server", "-ng", "-k", "-t", "2000", "-p", "8125");
             server_pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 
             Process server = server_pb.start();
 
             ProcessBuilder client1_pb = new ProcessBuilder("java", "-cp", "bin", "-Xms520m", "-Xmx520m",
-                    "boardgame.Client", "student_player.StudentPlayer");
+                    "boardgame.Client", "student_player.StudentPlayer", "localhost", "8125");
             client1_pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 
             ProcessBuilder client2_pb = new ProcessBuilder("java", "-cp", "bin", "-Xms520m", "-Xmx520m",
-                    "boardgame.Client", "tablut.RandomPlayer");
+                    "boardgame.Client", "student_player.StudentPlayer", "localhost", "8125");
             client2_pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 
             for (int i = 0; i < n_games; i++) {
@@ -84,5 +93,45 @@ public class Autoplay {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        List<String> lines = null;
+        try {
+            lines = Files.readAllLines(Paths.get("/Users/callum/projects/comp424-final-project/"+ Server.log_dir+"/outcomes.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        double whiteWins = 0;
+        double blackWins = 0;
+        double draws = 0;
+
+        for(String line : lines){
+            String win = line.split(",")[3];
+            switch(win) {
+                case "0":
+                    blackWins++;
+                    break;
+                case "1":
+                    whiteWins++;
+                    break;
+                default:
+                    draws++;
+                    break;
+            }
+        }
+
+        System.out.println("Black wins: " + blackWins/lines.size() );
+        System.out.println("White wins: " + whiteWins/lines.size() );
+        System.out.println("Draws: " + draws/lines.size() );
+    }
+
+    static void deleteDir(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                deleteDir(f);
+            }
+        }
+        file.delete();
     }
 }
