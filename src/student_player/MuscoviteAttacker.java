@@ -50,6 +50,13 @@ public class MuscoviteAttacker {
         List<Coord> partialCutOffCornerCoords = MyTools.getMuscovitePartialCutoffCornerCoords(bs, powerPositions);
         value += 7 * partialCutOffCornerCoords.size();
 
+        //Further reward building barricades near the king
+        for(Coord coord: partialCutOffCornerCoords) {
+            if (kingPosition.maxDifference(coord) <= 3) {
+                value += 2;
+            }
+        }
+
         //Don't let the king get to a a wall
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8)
             value -= 100;
