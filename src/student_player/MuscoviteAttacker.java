@@ -53,7 +53,7 @@ public class MuscoviteAttacker {
         //Further reward building barricades near the king
         for(Coord coord: partialCutOffCornerCoords) {
             if (kingPosition.maxDifference(coord) <= 3) {
-                value += 2;
+                value += 5;
             }
         }
 
