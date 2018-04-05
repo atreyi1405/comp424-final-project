@@ -25,8 +25,8 @@ public class MuscoviteAttacker {
 
 	    double value = 1000;
         //Muscovites reward keeping our own pieces rather than taking the Swedes
-		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 30;
-		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 20;
+		value += bs.getNumberPlayerPieces(TablutBoardState.MUSCOVITE) * 60;
+		value -= bs.getNumberPlayerPieces(TablutBoardState.SWEDE) * 40;
 
 		//Get corners that are cutoff
 		List<Coord> cutoffCorners = MyTools.getCutoffCorners(bs);
@@ -36,7 +36,6 @@ public class MuscoviteAttacker {
 		//Get power positions
         List<Coord> powerPositions = MyTools.getMuscovitePowerPositions(bs);
         Coord kingPosition = bs.getKingPosition();
-
 
         for(Coord coord : powerPositions) {
             //Reward power positions, even greater if they are near the king
@@ -59,7 +58,7 @@ public class MuscoviteAttacker {
 
         //Don't let the king get to a a wall
         if (kingPosition.x == 0 || kingPosition.x == 8 || kingPosition.y == 0 || kingPosition.y == 8)
-            value -= 100;
+            value -= 50;
 
 		return value;
 	}
