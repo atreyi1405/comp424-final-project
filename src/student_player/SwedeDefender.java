@@ -43,12 +43,12 @@ public class SwedeDefender {
         //Reward the Swede's for moving towards
         for(Coord freeCorner: freeCorners) {
             //Move away from cutoff corners
-            if (bs.getKingPosition().distance(freeCorner) < 5) {
+            if (bs.getKingPosition().maxDifference(freeCorner) <= 3) {
                 value += 15;
             }
         }
 
-
+        //Slightly reward king for moving towards corners
         value -= Coordinates.distanceToClosestCorner(bs.getKingPosition());
 
         return value;

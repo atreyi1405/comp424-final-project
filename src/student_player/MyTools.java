@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class MyTools {
+    //Determine which corners are cutoff, and which still need to be
     public static List<Coord> getCutoffCorners(TablutBoardState bs) {
         List<Coord> cutOffCorners = new ArrayList<>();
 
@@ -30,6 +31,7 @@ public class MyTools {
         return cutOffCorners;
     }
 
+    //Determine which corners are free, so the Swede's can move to those corners
     public static List<Coord> getFreeCorners(TablutBoardState bs) {
         List<Coord> freeCorners = new ArrayList<>();
 
@@ -46,6 +48,7 @@ public class MyTools {
         return freeCorners;
     }
 
+    //Determine which power positions the Muscovites hold
     public static List<Coord> getMuscovitePowerPositions(TablutBoardState bs) {
         List<Coord> powerPositions = new ArrayList<>();
 
@@ -64,22 +67,7 @@ public class MyTools {
         return powerPositions;
     }
 
-    public static boolean isCoordPowerPosition(Coord coord) {
-        if(coord.maxDifference(Coordinates.get(1, 1)) == 0)
-            return true;
-
-        if(coord.maxDifference(Coordinates.get(1, 7)) == 0)
-            return true;
-
-        if(coord.maxDifference(Coordinates.get(7, 1)) == 0)
-            return true;
-
-        if(coord.maxDifference(Coordinates.get(7, 7)) == 0)
-            return true;
-
-        return false;
-    }
-
+    //Function for returning partially cutoff corners, enroute to constructing a full barricade
     public static List<Coord> getMuscovitePartialCutoffCornerCoords(TablutBoardState bs, List<Coord> powerPositions) {
         List<Coord> partialCutoffCoords = new ArrayList<>();
         for(Coord coord: powerPositions) {

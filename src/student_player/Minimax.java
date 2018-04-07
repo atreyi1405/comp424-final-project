@@ -14,6 +14,7 @@ public class Minimax {
 
         List<TablutMove> bestMoves = new ArrayList<>();
 
+        //First level for loop is always max, as this move is the move of the current player
         for (TablutMove move : bs.getAllLegalMoves()) {
             TablutBoardState cloneBS = (TablutBoardState) bs.clone();
             cloneBS.processMove(move);
@@ -41,6 +42,7 @@ public class Minimax {
     }
 
     private static double minimax (Node node, int depth, double alpha, double beta, int maximizingPlayer) {
+        //If we have reached terminal depth or the game is over, evaluate and return the heuristic value
         if (depth == 0 || node.bs.gameOver()) {
             double value;
             if (maximizingPlayer == TablutBoardState.SWEDE) {
@@ -52,6 +54,7 @@ public class Minimax {
             return value;
         }
 
+        //If the current turn is a max player, get the max move from all the children
         if (node.bs.getTurnPlayer() == maximizingPlayer) {
             double bestValue = Integer.MIN_VALUE;
 
@@ -61,6 +64,7 @@ public class Minimax {
                 Node childNode = new Node(cloneBS, node, move);
                 bestValue = Math.max(bestValue, minimax(childNode, depth - 1, alpha, beta, maximizingPlayer));
                 alpha = Math.max(alpha, bestValue);
+                //if alpha has surpassed beta, prune this branch
                 if (beta <= alpha) {
                     break;
                 }
@@ -69,6 +73,7 @@ public class Minimax {
 
             node.value = bestValue;
             return  bestValue;
+        //The current player is the min player, get min move from all children
         } else {
             double bestValue = Integer.MAX_VALUE;
             for (TablutMove move : node.bs.getAllLegalMoves()) {
